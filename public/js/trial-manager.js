@@ -10,7 +10,8 @@ AFRAME.registerComponent("trial-manager", {
 
     this.poiCount = 5;
 
-    this.logger = document.querySelector("[data-logger]").components["data-logger"];
+    
+    this.logger = this.el.components["data-logger"];
 
     // Hook up Start Trial button
     document.querySelector("#startTrial")
@@ -46,7 +47,7 @@ AFRAME.registerComponent("trial-manager", {
 
     // Reset user position
     const rig = document.querySelector("#rig");
-    rig.setAttribute("position", "0 1.6 0");
+    rig.setAttribute("position", "0 0 0");
 
     // Spawn POIs
     const spawner = document.querySelector("#poi-container");
@@ -54,6 +55,7 @@ AFRAME.registerComponent("trial-manager", {
     this.spawnPOIs();
 
     // Start logging
+    console.log("Logger:", this.logger);
     this.logger.startTrial(this.envOrder[this.currentEnvIndex], this.currentTrial);
 
     // Begin monitoring POI collection

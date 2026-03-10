@@ -1,4 +1,4 @@
-function computePOIFeatures(userPos, userRot) {
+export function computePOIFeatures(userPos, userRot) {
   const pois = Array.from(document.querySelectorAll(".poi"));
   const forward = new THREE.Vector3(0, 0, -1)
     .applyEuler(userRot)

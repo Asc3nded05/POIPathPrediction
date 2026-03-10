@@ -2,10 +2,8 @@
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="js/trial-manager.js"></script>
-    <script src="js/poi-collectible.js"></script>
     <script src="js/poi-spawner.js"></script>
     <script src="js/data-logger.js"></script>
-    <script src="js/utils.js"></script>
   </head>
 
   <body>
@@ -33,7 +31,7 @@
     <!-- POIs will be spawned here -->
     <a-entity id="poi-container"></a-entity>
 
-    <a-entity trial-manager data-logger></a-entity>
+    <a-entity data-logger trial-manager></a-entity>
 
     <!-- UI button to export JSON -->
     <a-entity id="exportButton"
