@@ -1,5 +1,3 @@
-import { computePOIFeatures } from './utils.js';
-
 AFRAME.registerComponent("data-logger", {
 	init: function () {
 		this.lastLog = 0;

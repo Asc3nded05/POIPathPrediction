@@ -1,4 +1,4 @@
-export function computePOIFeatures(userPos, userRot) {
+function computePOIFeatures(userPos, userRot) {
   const pois = Array.from(document.querySelectorAll(".poi"));
   const forward = new THREE.Vector3(0, 0, -1)
     .applyEuler(userRot)
@@ -26,3 +26,5 @@ function signedAngle(v1, v2) {
   const cross = v1.clone().cross(v2).y;
   return cross >= 0 ? angle : -angle;
 }
+
+window.computePOIFeatures = computePOIFeatures;
