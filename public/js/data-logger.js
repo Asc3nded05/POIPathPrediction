@@ -1,22 +1,30 @@
 AFRAME.registerComponent("data-logger", {
-	init: function () {
-		this.lastLog = 0;
-		this.logInterval = 50; // ms
+	init: function () {		
 		this.data = [];
-		this.lastPos = new THREE.Vector3();
-		this.lastTime = performance.now();
 		this.isLogging = false;
 		this.currentEnv = null;
 		this.currentTrial = null;
 
+		this.lastPos = new THREE.Vector3();
+		this.lastTime = performance.now();
+
 		document.querySelector("#exportButton")
 		.addEventListener("click", () => this.exportData());
+
+		// Start 50ms timer (independent of framerate)
+		this.intervalID = setInterval(() => {
+			if (this.isLogging) this.logSample();
+		}, 50);
 	},
 
 	startTrial(env, trial) {
 		this.currentEnv = env;
 		this.currentTrial = trial;
 		this.isLogging = true;
+
+		this.lastTime = performance.now();
+		const cam = document.querySelector("#camera");
+		this.lastPos.copy(cam.object3D.position);
 
 		console.log(`Logging started for Env ${env}, Trial ${trial}`);
 	},
@@ -26,43 +34,48 @@ AFRAME.registerComponent("data-logger", {
 		console.log("Logging stopped for this trial.");
 	},
 
-	tick: function (time, delta) {
-		if (!this.isLogging) return;
-
-		if (time - this.lastLog < this.logInterval) return;
-		this.lastLog = time;
-
+	logSample: function () {
 		const cam = document.querySelector("#camera");
 		const pos = cam.object3D.position;
 		const rot = cam.object3D.rotation;
 
+		const now = performance.now();
+
 		// Compute velocity
-		const dt = (time - this.lastTime) / 1000;
+		const dt = (now - this.lastTime) / 1000;
 		const vx = (pos.x - this.lastPos.x) / dt;
 		const vz = (pos.z - this.lastPos.z) / dt;
 
 		this.lastPos.copy(pos);
-		this.lastTime = time;
+		this.lastTime = now;
 
 		// Compute POI distances + relative angles
 		const poiData = computePOIFeatures(pos, rot);
 
+		// if (this.data.length > 0) {
+		// 	const prev = this.data[this.data.length - 1].time;
+		// 	console.log("Δt =", now - prev);
+		// }
+
+		// Store sample
 		this.data.push({
-		time,
-		user: {
-			x: pos.x,
-			z: pos.z,
-			vx,
-			vz,
-			yaw: rot.y
-		},
-		pois: poiData
+			time: now,
+			env: this.currentEnv,
+			trial: this.currentTrial,
+			user: {
+				x: pos.x,
+				z: pos.z,
+				vx,
+				vz,
+				yaw: rot.y
+			},
+			pois: poiData
 		});
 	},
 
 	exportData: function () {
 		const blob = new Blob([JSON.stringify(this.data)], {
-		type: "application/json"
+			type: "application/json"
 		});
 		const url = URL.createObjectURL(blob);
 
