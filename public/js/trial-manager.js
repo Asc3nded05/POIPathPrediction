@@ -4,7 +4,7 @@ AFRAME.registerComponent("trial-manager", {
 		this.envOrder = this.shuffle(this.environments.slice());
 		this.currentEnvIndex = 0;
 		this.currentTrial = 0;
-		this.totalTrialsPerEnv = 15;
+		this.totalTrialsPerEnv = 5;
 		this.isTrialRunning = false;
 		this.poiCount = 5;
 
