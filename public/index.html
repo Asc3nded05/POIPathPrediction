@@ -1,56 +1,83 @@
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/poi-collectible.js"></script>
-    <script src="js/poi-spawner.js"></script>
-    <script src="js/data-logger.js"></script>
-    <script src="js/trial-manager.js"></script>
-  </head>
+    <head>
+        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/poi-collectible.js"></script>
+        <script src="js/poi-spawner.js"></script>
+        <script src="js/data-logger.js"></script>
+        <script src="js/trial-manager.js"></script>
+    </head>
 
-  <body>
-    <a-scene xr-mode-ui="enabled: true">
+    <body>
+        <a-scene xr-mode-ui="enabled: true">
+            
+        <!-- User rig -->
+        <a-entity id="rig">
+            <a-camera id="camera">
+                <a-cursor raycaster="objects: .clickable"></a-cursor>
+            </a-camera>
+        </a-entity>
 
-    <!-- User rig -->
-    <a-entity id="rig">
-        <a-camera id="camera">
-            <a-cursor raycaster="objects: .clickable"></a-cursor>
-        </a-camera>
-    </a-entity>
+        <!-- Ground -->
+        <a-plane position= "0 0 0" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
 
-    <!-- Ground -->
-    <a-plane position= "0 0 0" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+        <!-- Walls -->
+        <a-plane position= "0 3.5 -5" rotation="0 0 0" width="10" height="7" color="steelblue"></a-plane>
+        <a-plane position= "-5 3.5 0" rotation="0 90 0" width="10" height="7" color="steelblue"></a-plane>
+        <a-plane position= "0 3.5 5" rotation="0 180 0" width="10" height="7" color="steelblue"></a-plane>
+        <a-plane position= "5 3.5 0" rotation="0 270 0" width="10" height="7" color="steelblue"></a-plane>
 
-    <!-- Walls -->
-    <a-plane position= "0 3.5 -5" rotation="0 0 0" width="10" height="7" color="steelblue"></a-plane>
-    <a-plane position= "-5 3.5 0" rotation="0 90 0" width="10" height="7" color="steelblue"></a-plane>
-    <a-plane position= "0 3.5 5" rotation="0 180 0" width="10" height="7" color="steelblue"></a-plane>
-    <a-plane position= "5 3.5 0" rotation="0 270 0" width="10" height="7" color="steelblue"></a-plane>
+        <!-- Roof -->
+        <a-plane position= "0 7 0" rotation="90 0 0" width="10" height="10" color="slategray"></a-plane>
 
-    <!-- Roof -->
-     <a-plane position= "0 7 0" rotation="90 0 0" width="10" height="10" color="slategray"></a-plane>
 
-    <!-- POIs will be spawned here -->
-    <a-entity id="poi-container"></a-entity>
+        <!-- ========================= -->
+        <!-- ENVIRONMENT A — EMPTY ROOM -->
+        <!-- ========================= -->
+        <a-entity id="envA">
+            <!-- No interior geometry needed -->
+        </a-entity>
 
-    <a-entity data-logger trial-manager></a-entity>
+        <!-- ========================= -->
+        <!-- ENVIRONMENT B — FOUR PILLARS -->
+        <!-- ========================= -->
+        <a-entity id="envB" visible="false">
+            <a-cylinder position="-2 3.5 -2" radius="0.5" height="7" color="#slategray"></a-cylinder>
+            <a-cylinder position=" 2 3.5 -2" radius="0.5" height="7" color="#slategray"></a-cylinder>
+            <a-cylinder position="-2 3.5  2" radius="0.5" height="7" color="#slategray"></a-cylinder>
+            <a-cylinder position=" 2 3.5  2" radius="0.5" height="7" color="#slategray"></a-cylinder>
+        </a-entity>
 
-    <a-entity id="startTrial"
-              position="0 1.6 -1.5"
-              geometry="primitive: box; width: 0.8; height: 0.3; depth: 0.1"
-              material="color: white; shader: flat"
-              class="clickable"
-              event-set__enter="_event: mouseenter; material.color: #ddd"
-              event-set__leave="_event: mouseleave; material.color: white">
+        <!-- ========================= -->
+        <!-- ENVIRONMENT C — TWO WALLS -->
+        <!-- ========================= -->
+        <a-entity id="envC" visible="false">
+            <a-box position="3 3.5 0" rotation="0 90 0" width="6" height="7" depth="0.1" color="#slategray"></a-box>
+            <a-box position="-3 3.5 0" rotation="0 90 0" width="6" height="7" depth="0.1" color="#slategray"></a-box>
+        </a-entity>
 
-      <!-- Text label floating slightly in front of the box -->
-      <a-entity text="value: Start Trial; color: black; align: center; width: 2"
+
+
+        <!-- POIs will be spawned here -->
+        <a-entity id="poi-container"></a-entity>
+
+        <a-entity data-logger trial-manager></a-entity>
+
+        <a-entity id="startTrial"
+            position="0 1.6 -1.5"
+            geometry="primitive: box; width: 0.8; height: 0.3; depth: 0.1"
+            material="color: white; shader: flat"
+            class="clickable"
+            event-set__enter="_event: mouseenter; material.color: #ddd"
+            event-set__leave="_event: mouseleave; material.color: white">
+
+            <!-- Text label floating slightly in front of the box -->
+            <a-entity text="value: Start Trial; color: black; align: center; width: 2"
                 position="0 0 0.055"
                 raycastable="false">
-      </a-entity>
+            </a-entity>
+        </a-entity>
 
-    </a-entity>
-
-    </a-scene>
-  </body>
+        </a-scene>
+    </body>
 </html>

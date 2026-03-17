@@ -10,11 +10,11 @@ AFRAME.registerComponent("trial-manager", {
 
 		this.logger = this.el.components["data-logger"];
 
+		this.loadEnvironment(this.envOrder[this.currentEnvIndex]);
+
 		// Hook up Start Trial button
 		document.querySelector("#startTrial")
 		.addEventListener("click", () => this.startTrial());
-
-		document.querySelector('#exportButton').setAttribute('visible', 'false');
 	},
 
 	startTrial: function () {
@@ -121,14 +121,15 @@ AFRAME.registerComponent("trial-manager", {
 	loadEnvironment: function (envName) {
 		console.log("Switching to environment:", envName);
 
-		// You can later replace this with actual environment switching
-		// For now, just change wall colors to visualize the change
-		const walls = document.querySelectorAll("a-plane[color]");
-		walls.forEach(w => {
-			if (envName === "A") w.setAttribute("color", "steelblue");
-			if (envName === "B") w.setAttribute("color", "darkslateblue");
-			if (envName === "C") w.setAttribute("color", "midnightblue");
-		});
+		// Hide all environments
+		document.querySelector("#envA").setAttribute("visible", false);
+		document.querySelector("#envB").setAttribute("visible", false);
+		document.querySelector("#envC").setAttribute("visible", false);
+
+		// Show the selected one
+		if (envName === "A") document.querySelector("#envA").setAttribute("visible", true);
+		if (envName === "B") document.querySelector("#envB").setAttribute("visible", true);
+		if (envName === "C") document.querySelector("#envC").setAttribute("visible", true);
 	},
 
 	shuffle: function (arr) {
