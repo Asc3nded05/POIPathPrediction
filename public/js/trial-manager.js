@@ -4,7 +4,7 @@ AFRAME.registerComponent("trial-manager", {
 		this.envOrder = this.shuffle(this.environments.slice());
 		this.currentEnvIndex = 0;
 		this.currentTrial = 0;
-		this.totalTrialsPerEnv = 15;
+		this.totalTrialsPerEnv = 5;
 		this.isTrialRunning = false;
 		this.poiCount = 5;
 
@@ -104,15 +104,14 @@ AFRAME.registerComponent("trial-manager", {
 
 			// If trials have been run in all environments
 			if (this.currentEnvIndex >= this.envOrder.length) {
-				alert("All Environments complete! Export your data.");
+				console.log("All Environments complete!");
 
-				// Make export data button visible
-				document.querySelector('#exportData').setAttribute('visible', 'true');
+				this.logger.autoExport();
 
 				return;
 			};
 			
-			// Make start trail button visible
+			// Make start trial button visible
 			document.querySelector('#startTrial').setAttribute('visible', 'true');
 			// Load the next environment
 			this.loadEnvironment(this.envOrder[this.currentEnvIndex]);

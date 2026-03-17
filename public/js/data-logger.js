@@ -8,9 +8,6 @@ AFRAME.registerComponent("data-logger", {
 		this.lastPos = new THREE.Vector3();
 		this.lastTime = performance.now();
 
-		document.querySelector("#exportButton")
-		.addEventListener("click", () => this.exportData());
-
 		// Start 50ms timer (independent of framerate)
 		this.intervalID = setInterval(() => {
 			if (this.isLogging) this.logSample();
@@ -72,8 +69,10 @@ AFRAME.registerComponent("data-logger", {
 			pois: poiData
 		});
 	},
+	
+	autoExport: function () {
+		console.log("Auto-exporting data…");
 
-	exportData: function () {
 		const blob = new Blob([JSON.stringify(this.data)], {
 			type: "application/json"
 		});
