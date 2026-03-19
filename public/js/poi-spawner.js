@@ -8,7 +8,13 @@ AFRAME.registerComponent("poi-spawner", {
         this.spawnPOIs();
     },
 
+    randomPoiColor: function () {
+        const colors = ["#FFC300", "#FF5733", "#33FF57", "#3380FF", "#FF33D4", "#33FFF0"];
+        return colors[Math.floor(Math.random() * colors.length)];
+    },
+
     spawnPOIs: function () {
+        const poiColor = this.randomPoiColor();
         const container = document.querySelector("#poi-container");
         container.innerHTML = "";
 
@@ -23,11 +29,8 @@ AFRAME.registerComponent("poi-spawner", {
         let attempts = 0;
 
         do {
-            const angle = Math.random() * Math.PI * 2;
-            const r = 2 + Math.random() * 2;
-
-            x = Math.cos(angle) * r;
-            z = Math.sin(angle) * r;
+            x = (Math.random() * 4) - 2;      // x in [-2, 2]
+            z = (Math.random() * 7.5) - 3.75; // z in [-3.75, 3.75]
 
             attempts++;
             if (attempts > 50) console.warn("POI spawn struggling to find valid location");
@@ -38,7 +41,7 @@ AFRAME.registerComponent("poi-spawner", {
         const poi = document.createElement("a-sphere");
         poi.setAttribute("class", "poi");
         poi.setAttribute("radius", "0.15");
-        poi.setAttribute("color", "#FFC300");
+        poi.setAttribute("color", poiColor);
         poi.setAttribute("position", `${x} 1.5 ${z}`);
         poi.setAttribute("poi-collectible", "");
 

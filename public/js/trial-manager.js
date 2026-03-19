@@ -4,7 +4,7 @@ AFRAME.registerComponent("trial-manager", {
 		this.envOrder = this.shuffle(this.environments.slice());
 		this.currentEnvIndex = 0;
 		this.currentTrial = 0;
-		this.totalTrialsPerEnv = 5;
+		this.totalTrialsPerEnv = 15;
 		this.isTrialRunning = false;
 		this.poiCount = 5;
 
@@ -25,8 +25,9 @@ AFRAME.registerComponent("trial-manager", {
 
 		this.isTrialRunning = true;
 		this.currentTrial++;
+		this.currentPoiColor = this.randomPoiColor();
 
-		console.log(`Starting Trial ${this.currentTrial} in Environment ${this.envOrder[this.currentEnvIndex]}`);
+		console.log(`Starting Trial ${this.currentTrial} in Environment ${this.envOrder[this.currentEnvIndex]} with POI color ${this.currentPoiColor}`);
 
 		// Reset user position
 		const rig = document.querySelector("#rig");
@@ -47,23 +48,40 @@ AFRAME.registerComponent("trial-manager", {
 
 	spawnPOIs: function () {
 		const container = document.querySelector("#poi-container");
+		const env = this.envOrder[this.currentEnvIndex];
+		const placed = [];
 
 		for (let i = 0; i < this.poiCount; i++) {
-		const angle = Math.random() * Math.PI * 2;
-		const r = 2 + Math.random() * 2;
+			let x, z;
+			let attempts = 0;
 
-		const x = Math.cos(angle) * r;
-		const z = Math.sin(angle) * r;
+			do {
+				x = (Math.random() * 4) - 2;      // x in [-2, 2]
+				z = (Math.random() * 7.5) - 3.75; // z in [-3.75, 3.75]
 
-		const poi = document.createElement("a-sphere");
-		poi.setAttribute("class", "poi");
-		poi.setAttribute("radius", "0.15");
-		poi.setAttribute("color", "#FFC300");
-		poi.setAttribute("position", `${x} 1.5 ${z}`);
-		poi.setAttribute("poi-collectible", "");
+				attempts++;
+				if (attempts > 50) {
+					console.warn("POI spawn struggling to find valid location");
+					break;
+				}
+			} while (invalidPOIPosition(env, x, z, placed));
 
-		container.appendChild(poi);
+			placed.push({x, z});
+
+			const poi = document.createElement("a-sphere");
+			poi.setAttribute("class", "poi");
+			poi.setAttribute("radius", "0.15");
+			poi.setAttribute("color", this.currentPoiColor || "#FFC300");
+			poi.setAttribute("position", `${x} 1.5 ${z}`);
+			poi.setAttribute("poi-collectible", "");
+
+			container.appendChild(poi);
 		}
+	},
+
+	randomPoiColor: function () {
+		const colors = ["#FFC300", "#FF5733", "#33FF57", "#3380FF", "#FF33D4", "#33FFF0"];
+		return colors[Math.floor(Math.random() * colors.length)];
 	},
 
 	checkPOIs: function () {

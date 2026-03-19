@@ -35,16 +35,23 @@ function tooCloseToOtherPOIs(x, z, existing, minDist = 0.25) {
     });
 }
 
+function outsideRoom(x, z) {
+    const halfWidth = 2.0;
+    const halfDepth = 3.75;
+    const buffer = 0.2;
+    return Math.abs(x) > halfWidth - buffer || Math.abs(z) > halfDepth - buffer;
+}
+
 function insidePillar(x, z) {
     const pillars = [
-        {x: -2, z: -2},
-        {x:  2, z: -2},
-        {x: -2, z:  2},
-        {x:  2, z:  2}
+        {x: -1.2, z: -2.5},
+        {x:  1.2, z: -2.5},
+        {x: -1.2, z:  2.5},
+        {x:  1.2, z:  2.5}
     ];
 
     const radius = 0.5;
-    const buffer = 0.6; // realistic VR buffer
+    const buffer = 0.25; // realistic VR buffer
 
     const R = radius + buffer;
 
@@ -57,15 +64,15 @@ function insidePillar(x, z) {
 
 function insideWall(x, z) {
     const thickness = 0.1;
-    const halfLength = 3; // from z = -3 to +3
-    const buffer = 0.6;
+    const halfLength = 3.75; // from z = -3.75 to +3.75 for C
+    const buffer = 0.25;
 
-    // Wall at x = 3
-    if (Math.abs(x - 3) < thickness/2 + buffer &&
+    // Wall at x = 1.2
+    if (Math.abs(x - 1.2) < thickness/2 + buffer &&
         Math.abs(z) < halfLength + buffer) return true;
 
-    // Wall at x = -3
-    if (Math.abs(x + 3) < thickness/2 + buffer &&
+    // Wall at x = -1.2
+    if (Math.abs(x + 1.2) < thickness/2 + buffer &&
         Math.abs(z) < halfLength + buffer) return true;
 
     return false;
@@ -73,6 +80,7 @@ function insideWall(x, z) {
 
 function invalidPOIPosition(env, x, z, existingPOIs) {
     if (tooCloseToOtherPOIs(x, z, existingPOIs)) return true;
+    if (outsideRoom(x, z)) return true;
 
     if (env === "B" && insidePillar(x, z)) return true;
     if (env === "C" && insideWall(x, z)) return true;
