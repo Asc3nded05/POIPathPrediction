@@ -87,7 +87,7 @@ AFRAME.registerComponent("data-logger", {
 	autoExport: function () {
 		console.log("Exporting Data");
 		
-		fetch("https://UPDATEURL/upload", {
+		fetch("https://https://poipathpredictionbackend.onrender.com/upload", {
 			method: "POST",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify(this.data)
