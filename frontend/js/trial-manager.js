@@ -135,6 +135,7 @@ AFRAME.registerComponent("trial-manager", {
 				
 				// Show completion panel
 				document.querySelector("#completionPanel").setAttribute("visible", "true");
+				document.querySelector("#completionPanel").setAttribute("class", "clickable");
 
 				// Export data
 				this.logger.exportSession();
@@ -154,6 +155,8 @@ AFRAME.registerComponent("trial-manager", {
 
 		// Hide completion panel
 		document.querySelector("#completionPanel").setAttribute("visible", "false");
+		document.querySelector("#completionPanel").setAttribute("class", "nonClickable");
+		document.querySelector("#restartTrials").setAttribute("class", "nonClickable")
 
 		// Reset internal state
 		this.envOrder = this.shuffle(this.environments.slice());

@@ -78,6 +78,7 @@ app.post("/upload", async (req, res) => {
     } else {
       // Full session upload
       filename = `${sessionFolder}/session-full-${timestamp}.json`;
+      sessionFolder = null;
     }
 
     const result = await uploadToSupabase(filename, payload);
