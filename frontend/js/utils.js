@@ -17,8 +17,8 @@ function computePOIFeatures(userPos, userRot) {
         return { distance, angle };
     });
 
-    // Sort by distance and take nearest 3
-    return results.sort((a, b) => a.distance - b.distance).slice(0, 3);
+    // Sort by distance and take nearest 5
+    return results.sort((a, b) => a.distance - b.distance).slice(0, 5);
 }
 
 function signedAngle(v1, v2) {
