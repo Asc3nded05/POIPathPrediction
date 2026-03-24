@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@supabase/supabase-js": "^2.100.0",
     "aframe": "^1.7.1",
     "googleapis": "^171.4.0"
   }
