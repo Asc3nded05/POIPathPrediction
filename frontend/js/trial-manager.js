@@ -7,6 +7,7 @@ AFRAME.registerComponent("trial-manager", {
 		this.totalTrialsPerEnv = 5;
 		this.isTrialRunning = false;
 		this.poiCount = 5;
+		this.previousPoiColor = null;
 
 		this.logger = this.el.components["data-logger"];
 
@@ -15,6 +16,10 @@ AFRAME.registerComponent("trial-manager", {
 		// Hook up Start Trial button
 		document.querySelector("#startTrial")
 		.addEventListener("click", () => this.startTrial());
+
+		// Hook up Restart Trials button
+		document.querySelector("#restartTrials")
+    	.addEventListener("click", () => this.resetTrials());
 	},
 
 	startTrial: function () {
@@ -81,7 +86,19 @@ AFRAME.registerComponent("trial-manager", {
 
 	randomPoiColor: function () {
 		const colors = ["#FFC300", "#FF5733", "#33FF57", "#3380FF", "#FF33D4", "#33FFF0"];
-		return colors[Math.floor(Math.random() * colors.length)];
+
+		// Filter out the previous color
+		const available = this.previousPoiColor
+			? colors.filter(c => c !== this.previousPoiColor)
+			: colors;
+
+		// Pick a new one
+		const newColor = available[Math.floor(Math.random() * available.length)];
+
+		// Store it for next time
+		this.previousPoiColor = newColor;
+
+		return newColor;
 	},
 
 	checkPOIs: function () {
@@ -124,16 +141,39 @@ AFRAME.registerComponent("trial-manager", {
 			if (this.currentEnvIndex >= this.envOrder.length) {
 				console.log("All Environments complete!");
 
+				// Export data
 				this.logger.autoExport();
 
+				// Show completion panel
+				document.querySelector("#completionPanel").setAttribute("visible", "true");
+
 				return;
-			};
+			}
 			
 			// Make start trial button visible
 			document.querySelector('#startTrial').setAttribute('visible', 'true');
 			// Load the next environment
 			this.loadEnvironment(this.envOrder[this.currentEnvIndex]);
 		}
+	},
+
+	resetTrials: function () {
+		console.log("Resetting all trials...");
+
+		// Hide completion panel
+		document.querySelector("#completionPanel").setAttribute("visible", "false");
+
+		// Reset internal state
+		this.envOrder = this.shuffle(this.environments.slice());
+		this.currentEnvIndex = 0;
+		this.currentTrial = 0;
+		this.isTrialRunning = false;
+
+		// Load first environment
+		this.loadEnvironment(this.envOrder[this.currentEnvIndex]);
+
+		// Show Start Trial button again
+		document.querySelector("#startTrial").setAttribute("visible", "true");
 	},
 
 	loadEnvironment: function (envName) {

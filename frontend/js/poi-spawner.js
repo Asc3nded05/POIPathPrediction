@@ -8,13 +8,9 @@ AFRAME.registerComponent("poi-spawner", {
         this.spawnPOIs();
     },
 
-    randomPoiColor: function () {
-        const colors = ["#FFC300", "#FF5733", "#33FF57", "#3380FF", "#FF33D4", "#33FFF0"];
-        return colors[Math.floor(Math.random() * colors.length)];
-    },
-
     spawnPOIs: function () {
-        const poiColor = this.randomPoiColor();
+        const trialManager = document.querySelector("[trial-manager]").components["trial-manager"];
+        const poiColor = trialManager.currentPoiColor;
         const container = document.querySelector("#poi-container");
         container.innerHTML = "";
 

@@ -78,6 +78,31 @@
             </a-entity>
         </a-entity>
 
+        <!-- Completion Panel (hidden by default) -->
+        <a-entity id="completionPanel" visible="false" position="0 1.6 -1.5">
+
+            <!-- Background box -->
+            <a-plane width="1.8" height="0.8" color="white" material="shader: flat"></a-plane>
+
+            <!-- Completion text -->
+            <a-entity text="value: All trials complete!; color: black; align: center; width: 3"
+                    position="0 0.2 0.01"></a-entity>
+
+            <!-- Restart button -->
+            <a-entity id="restartTrials"
+                    geometry="primitive: box; width: 1; height: 0.3; depth: 0.1"
+                    material="color: #eee; shader: flat"
+                    position="0 -0.2 0.05"
+                    class="clickable"
+                    event-set__enter="_event: mouseenter; material.color: #ddd"
+                    event-set__leave="_event: mouseleave; material.color: #eee">
+
+                <a-entity text="value: Start New Set; color: black; align: center; width: 2"
+                        position="0 0 0.055"></a-entity>
+            </a-entity>
+
+        </a-entity>
+
         </a-scene>
     </body>
 </html>
