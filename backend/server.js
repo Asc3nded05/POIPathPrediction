@@ -58,30 +58,36 @@ const dataDir = path.join(__dirname, "data");
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
 
 // Upload endpoint
+let sessionFolder = null;
+
 app.post("/upload", async (req, res) => {
-    try {
-        const payload = req.body;
+  try {
+    const payload = req.body;
 
-        const timestamp = getLocalTimestamp();
-
-        let filename;
-
-        if (payload.samples && payload.trial && payload.env) {
-        // This is a single trial upload
-        filename = `trial-env_${payload.env}-trial_${payload.trial}-${timestamp}.json`;
-        } else {
-        // This is a full session upload
-        filename = `session-full-${timestamp}.json`;
-        }
-
-        const result = await uploadToSupabase(filename, payload);
-
-        res.json({ success: true, file: filename, storage: result });
-
-    } catch (err) {
-        console.error("Upload error:", err);
-        res.status(500).json({ success: false, error: "Failed to upload" });
+    // Create a folder name on first upload
+    if (!sessionFolder) {
+      sessionFolder = `session_${getLocalTimestamp()}`;
     }
+
+    const timestamp = getLocalTimestamp();
+    let filename;
+
+    if (payload.samples && payload.trial && payload.env) {
+      // Single trial upload
+      filename = `${sessionFolder}/trial-env_${payload.env}-trial_${payload.trial}-${timestamp}.json`;
+    } else {
+      // Full session upload
+      filename = `${sessionFolder}/session-full-${timestamp}.json`;
+    }
+
+    const result = await uploadToSupabase(filename, payload);
+
+    res.json({ success: true, file: filename, storage: result });
+
+  } catch (err) {
+    console.error("Upload error:", err);
+    res.status(500).json({ success: false, error: "Failed to upload" });
+  }
 });
 
 const PORT = process.env.PORT || 3000;
