@@ -69,20 +69,6 @@ AFRAME.registerComponent("data-logger", {
 			pois: poiData
 		});
 	},
-	
-	// autoExport: function () {
-	// 	console.log("Auto-exporting data…");
-
-	// 	const blob = new Blob([JSON.stringify(this.data)], {
-	// 		type: "application/json"
-	// 	});
-	// 	const url = URL.createObjectURL(blob);
-
-	// 	const a = document.createElement("a");
-	// 	a.href = url;
-	// 	a.download = "vr_data.json";
-	// 	a.click();
-	// }
 
 	autoExport: function () {
 		console.log("Exporting Data");
@@ -95,5 +81,7 @@ AFRAME.registerComponent("data-logger", {
 		.then(res => res.json())
 		.then(result => console.log("Upload result:", result))
 		.catch(err => console.error("Upload failed:", err));
+
+		document.querySelector("#restartTrials").setAttribute("class", "clickable");
 	}
 });

@@ -7,8 +7,8 @@ AFRAME.registerComponent("trial-manager", {
 		this.totalTrialsPerEnv = 5;
 		this.isTrialRunning = false;
 		this.poiCount = 5;
-		this.previousPoiColor = null;
-
+		this.colorIndex = 0;
+		this.colors = ["#FFC300", "#FF5733", "#33FF57", "#3380FF", "#FF33D4", "#33FFF0"];
 		this.logger = this.el.components["data-logger"];
 
 		this.loadEnvironment(this.envOrder[this.currentEnvIndex]);
@@ -30,7 +30,7 @@ AFRAME.registerComponent("trial-manager", {
 
 		this.isTrialRunning = true;
 		this.currentTrial++;
-		this.currentPoiColor = this.randomPoiColor();
+		this.currentPoiColor = this.nextPoiColor();
 
 		console.log(`Starting Trial ${this.currentTrial} in Environment ${this.envOrder[this.currentEnvIndex]} with POI color ${this.currentPoiColor}`);
 
@@ -84,21 +84,13 @@ AFRAME.registerComponent("trial-manager", {
 		}
 	},
 
-	randomPoiColor: function () {
-		const colors = ["#FFC300", "#FF5733", "#33FF57", "#3380FF", "#FF33D4", "#33FFF0"];
+	nextPoiColor: function () {
+		const color = this.colors[this.colorIndex];
 
-		// Filter out the previous color
-		const available = this.previousPoiColor
-			? colors.filter(c => c !== this.previousPoiColor)
-			: colors;
+		// Move to next color, wrap around at end
+		this.colorIndex = (this.colorIndex + 1) % this.colors.length;
 
-		// Pick a new one
-		const newColor = available[Math.floor(Math.random() * available.length)];
-
-		// Store it for next time
-		this.previousPoiColor = newColor;
-
-		return newColor;
+		return color;
 	},
 
 	checkPOIs: function () {
@@ -140,12 +132,12 @@ AFRAME.registerComponent("trial-manager", {
 			// If trials have been run in all environments
 			if (this.currentEnvIndex >= this.envOrder.length) {
 				console.log("All Environments complete!");
+				
+				// Show completion panel
+				document.querySelector("#completionPanel").setAttribute("visible", "true");
 
 				// Export data
 				this.logger.autoExport();
-
-				// Show completion panel
-				document.querySelector("#completionPanel").setAttribute("visible", "true");
 
 				return;
 			}
