@@ -7,30 +7,50 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "10mb" })); // allow large JSON logs
 
+function getLocalTimestamp() {
+    const now = new Date();
+    const options = {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    };
+
+    const parts = new Intl.DateTimeFormat("en-US", options).formatToParts(now);
+
+    const lookup = Object.fromEntries(parts.map(p => [p.type, p.value]));
+
+    return `${lookup.year}-${lookup.month}-${lookup.day}_${lookup.hour}-${lookup.minute}-${lookup.second}`;
+}
+
 // Upload JSON files to Supabase for permanent storage
 const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 async function uploadToSupabase(filename, data) {
-  const jsonString = JSON.stringify(data, null, 2);
+    const jsonString = JSON.stringify(data, null, 2);
 
-  const { data: uploadData, error } = await supabase.storage
-    .from(process.env.SUPABASE_BUCKET)
-    .upload(filename, Buffer.from(jsonString), {
-      contentType: "application/json",
-      upsert: false
-    });
+    const { data: uploadData, error } = await supabase.storage
+        .from(process.env.SUPABASE_BUCKET)
+        .upload(filename, Buffer.from(jsonString), {
+        contentType: "application/json",
+        upsert: false
+        });
 
-  if (error) {
-    console.error("Supabase upload error:", error);
-    throw error;
-  }
+    if (error) {
+        console.error("Supabase upload error:", error);
+        throw error;
+    }
 
-  return uploadData;
+    return uploadData;
 }
 
 // Ensure data folder exists
@@ -39,24 +59,29 @@ if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
 
 // Upload endpoint
 app.post("/upload", async (req, res) => {
-  try {
-    const sessionData = req.body;
+    try {
+        const payload = req.body;
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `session-${timestamp}.json`;
+        const timestamp = getLocalTimestamp();
 
-    // Upload directly to Supabase
-    const result = await uploadToSupabase(filename, sessionData);
+        let filename;
 
-    res.json({
-      success: true,
-      file: filename,
-      storage: result
-    });
-  } catch (err) {
-    console.error("Upload error:", err);
-    res.status(500).json({ success: false, error: "Failed to upload to Supabase" });
-  }
+        if (payload.samples && payload.trial && payload.env) {
+        // This is a single trial upload
+        filename = `trial-env_${payload.env}-trial_${payload.trial}-${timestamp}.json`;
+        } else {
+        // This is a full session upload
+        filename = `session-full-${timestamp}.json`;
+        }
+
+        const result = await uploadToSupabase(filename, payload);
+
+        res.json({ success: true, file: filename, storage: result });
+
+    } catch (err) {
+        console.error("Upload error:", err);
+        res.status(500).json({ success: false, error: "Failed to upload" });
+    }
 });
 
 const PORT = process.env.PORT || 3000;

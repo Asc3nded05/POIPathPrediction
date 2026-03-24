@@ -137,7 +137,7 @@ AFRAME.registerComponent("trial-manager", {
 				document.querySelector("#completionPanel").setAttribute("visible", "true");
 
 				// Export data
-				this.logger.autoExport();
+				this.logger.exportSession();
 
 				return;
 			}
