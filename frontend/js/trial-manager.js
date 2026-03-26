@@ -62,7 +62,7 @@ AFRAME.registerComponent("trial-manager", {
 
 			do {
 				x = (Math.random() * 4) - 2;      // x in [-2, 2]
-				z = (Math.random() * 7.5) - 3.75; // z in [-3.75, 3.75]
+				z = (Math.random() * 6.5) - 3.25; // z in [-3.25, 3.25]
 
 				attempts++;
 				if (attempts > 50) {

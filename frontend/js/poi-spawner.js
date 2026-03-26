@@ -26,7 +26,7 @@ AFRAME.registerComponent("poi-spawner", {
 
         do {
             x = (Math.random() * 4) - 2;      // x in [-2, 2]
-            z = (Math.random() * 7.5) - 3.75; // z in [-3.75, 3.75]
+            z = (Math.random() * 6.5) - 3.25; // z in [-3.25, 3.25]
 
             attempts++;
             if (attempts > 50) console.warn("POI spawn struggling to find valid location");
@@ -38,7 +38,7 @@ AFRAME.registerComponent("poi-spawner", {
         poi.setAttribute("class", "poi");
         poi.setAttribute("radius", "0.15");
         poi.setAttribute("color", poiColor);
-        poi.setAttribute("position", `${x} 1.5 ${z}`);
+        poi.setAttribute("position", `${x} 1.25 ${z}`);
         poi.setAttribute("poi-collectible", "");
 
         container.appendChild(poi);

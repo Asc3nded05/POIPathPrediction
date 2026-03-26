@@ -37,7 +37,7 @@ function tooCloseToOtherPOIs(x, z, existing, minDist = 0.25) {
 
 function outsideRoom(x, z) {
     const halfWidth = 2.0;
-    const halfDepth = 3.75;
+    const halfDepth = 3.25;
     const buffer = 0.2;
     return Math.abs(x) > halfWidth - buffer || Math.abs(z) > halfDepth - buffer;
 }
@@ -64,7 +64,7 @@ function insidePillar(x, z) {
 
 function insideWall(x, z) {
     const thickness = 0.1;
-    const halfLength = 3.75; // from z = -3.75 to +3.75 for C
+    const halfLength = 3.25; // from z = -3.25 to +3.25 for C
     const buffer = 0.25;
 
     // Wall at x = 1.2
