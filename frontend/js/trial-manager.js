@@ -1,10 +1,10 @@
 AFRAME.registerComponent("trial-manager", {
 	init: function () {
-		this.environments = ["A", "B", "C"];
+		this.environments = ["A", "B", "C", "D"];
 		this.envOrder = this.shuffle(this.environments.slice());
 		this.currentEnvIndex = 0;
 		this.currentTrial = 0;
-		this.totalTrialsPerEnv = 20;
+		this.totalTrialsPerEnv = 15;
 		this.isTrialRunning = false;
 		this.poiCount = 5;
 		this.colorIndex = 0;
@@ -178,11 +178,13 @@ AFRAME.registerComponent("trial-manager", {
 		document.querySelector("#envA").setAttribute("visible", false);
 		document.querySelector("#envB").setAttribute("visible", false);
 		document.querySelector("#envC").setAttribute("visible", false);
+		document.querySelector("#envD").setAttribute("visible", false);
 
 		// Show the selected one
 		if (envName === "A") document.querySelector("#envA").setAttribute("visible", true);
 		if (envName === "B") document.querySelector("#envB").setAttribute("visible", true);
 		if (envName === "C") document.querySelector("#envC").setAttribute("visible", true);
+		if (envName === "D") document.querySelector("#envD").setAttribute("visible", true);
 	},
 
 	shuffle: function (arr) {
