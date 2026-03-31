@@ -35,7 +35,7 @@ function tooCloseToOtherPOIs(x, z, existing, minDist = 0.25) {
     });
 }
 
-function tooCloseToUser(x, z, minDist = 0.5) {
+function tooCloseToUser(x, z, minDist = 1.0) {
     return Math.sqrt(x*x + z*z) < minDist;
 }
 
