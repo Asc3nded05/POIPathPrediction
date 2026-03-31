@@ -10,6 +10,7 @@ AFRAME.registerComponent("poi-collectible", {
     const dist = Math.sqrt(dx*dx + dz*dz);
 
     if (dist < 0.5) {
+      document.querySelector("#pickupSound").components.sound.playSound();
       this.el.parentNode.removeChild(this.el);
     }
   }
