@@ -29,7 +29,7 @@ AFRAME.registerComponent("poi-spawner", {
             z = (Math.random() * 6.5) - 3.25; // z in [-3.25, 3.25]
 
             attempts++;
-            if (attempts > 50) console.warn("POI spawn struggling to find valid location");
+            if (attempts > 200) console.warn("POI spawn struggling to find valid location");
         } while (invalidPOIPosition(env, x, z, placed));
 
         placed.push({x, z});

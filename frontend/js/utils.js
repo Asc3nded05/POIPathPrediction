@@ -27,7 +27,7 @@ function signedAngle(v1, v2) {
     return cross >= 0 ? angle : -angle;
 }
 
-function tooCloseToOtherPOIs(x, z, existing, minDist = 0.25) {
+function tooCloseToOtherPOIs(x, z, existing, minDist = 0.35) {
     return existing.some(p => {
         const dx = p.x - x;
         const dz = p.z - z;
@@ -35,8 +35,11 @@ function tooCloseToOtherPOIs(x, z, existing, minDist = 0.25) {
     });
 }
 
-function tooCloseToUser(x, z, minDist = 1.0) {
-    return Math.sqrt(x*x + z*z) < minDist;
+function tooCloseToUser(x, z, minDist = 0.6) {
+    const cam = document.querySelector("#camera").object3D.position;
+    const dx = x - cam.x;
+    const dz = z - cam.z;
+    return Math.sqrt(dx*dx + dz*dz) < minDist;
 }
 
 function outsideRoom(x, z) {
@@ -54,8 +57,8 @@ function insidePillar(x, z) {
         {x:  1, z:  1.5}
     ];
 
-    const radius = 0.5;
-    const buffer = 0.25; 
+    const radius = 0.25;
+    const buffer = 0.1; 
 
     const R = radius + buffer;
 
@@ -69,7 +72,7 @@ function insidePillar(x, z) {
 function insideWall(x, z) {
     const thickness = 0.1;
     const halfLength = 2; // from z = -2 to +2 for C
-    const buffer = 0.25;
+    const buffer = 0.1;
 
     // Wall at x = 1.2
     if (Math.abs(x - 1.2) < thickness/2 + buffer &&
@@ -84,7 +87,7 @@ function insideWall(x, z) {
 
 function insideMazeWall(x, z) {
     const thickness = 0.1;
-    const buffer = 0.25;
+    const buffer = 0.1;
 
     // Wall 1: position="-1.5 2.5 -1.0" width="1.0" depth="0.1"
     // X: -2.0 to -1.0, Z: -1.0
