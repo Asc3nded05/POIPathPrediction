@@ -30,11 +30,14 @@
         <!-- Roof -->
         <a-plane position="0 5 0" rotation="90 0 0" width="4" height="6.5" color="#999"></a-plane>
 
-
+        <!-- Backgrounf -->
         <!-- ========================= -->
         <!-- ENVIRONMENT A — EMPTY ROOM -->
         <!-- ========================= -->
-        <a-entity id="envA"  sound="src: C:\Users\JetPa\OneDrive\Documents\POI-walking-project\POIPathPrediction\frontend\04. Mii Plaza.mp3; autoplay: true">
+        <a-entity id="envA">
+            <a-entity class="envSound"
+                sound="src: url(assets/MiiPlaza.mp3); loop: true; volume: 0.5">
+            </a-entity>
             <!-- No interior geometry needed -->
         </a-entity>
 
@@ -42,6 +45,9 @@
         <!-- ENVIRONMENT B — FOUR PILLARS -->
         <!-- ========================= -->
         <a-entity id="envB" visible="false">
+            <a-entity class="envSound"
+                sound="src: url(assets/openingtheme.mp3); loop: true; volume: 0.5">
+            </a-entity>
             <a-cylinder position="-1 2.5 -1.5" radius="0.25" height="5" color="white"></a-cylinder>
             <a-cylinder position=" 1 2.5 -1.5" radius="0.25" height="5" color="white"></a-cylinder>
             <a-cylinder position="-1 2.5  1.5" radius="0.25" height="5" color="white"></a-cylinder>
@@ -52,6 +58,9 @@
         <!-- ENVIRONMENT C — TWO WALLS -->
         <!-- ========================= -->
         <a-entity id="envC" visible="false">
+            <a-entity class="envSound"
+                sound="src: url(assets/underwater.mp3); loop: true; volume: 0.5">
+            </a-entity>
             <a-box position="1.2 2.5 0" rotation="0 90 0" width="4.0" height="5" depth="0.1" color="white"></a-box>
             <a-box position="-1.2 2.5 0" rotation="0 90 0" width="4.0" height="5" depth="0.1" color="white"></a-box>
         </a-entity>
@@ -60,6 +69,9 @@
         <!-- ENVIRONMENT D — MAZE -->
         <!-- ========================= -->
         <a-entity id="envD" visible="false">
+            <a-entity class="envSound"
+                sound="src: url(assets/diredocks.mp3); loop: true; volume: 0.5">
+            </a-entity>
             <!-- X walls -->
             <a-box position="-1.5 2.5 -1.0" rotation="0 0 0" width="1.0" height="5" depth="0.1" color="white"></a-box>
             <a-box position="0.0 2.5 -2.0" rotation="0 0 0" width="2.5" height="5" depth="0.1" color="white"></a-box>
@@ -116,6 +128,7 @@
         <a-entity id="pickupSound"
             sound="src: url(assets/pluck_001.ogg); autoplay: false; volume: 1.0">
         </a-entity>
+        
 
         </a-scene>
     </body>

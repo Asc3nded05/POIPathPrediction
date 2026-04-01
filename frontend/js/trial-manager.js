@@ -21,13 +21,30 @@ AFRAME.registerComponent("trial-manager", {
 		document.querySelector("#restartTrials")
     	.addEventListener("click", () => this.resetTrials());
 	},
+	stopAllEnvSounds: function () {
+	document.querySelectorAll('.envSound').forEach(el => {
+		if (el.components.sound) {
+			el.components.sound.stopSound();
+		}
+		});
+	},
+
+	playCurrentEnvSound: function () {
+		const envName = this.envOrder[this.currentEnvIndex];
+		const envEl = document.querySelector(`#env${envName}`);
+		const soundEl = envEl.querySelector('.envSound');
+
+		if (soundEl && soundEl.components.sound) {
+			soundEl.components.sound.playSound();
+		}
+	},
 
 	startTrial: function () {
 		if (this.isTrialRunning) return;
 
 		// Hide start trial button when clicked
 		document.querySelector('#startTrial').setAttribute('visible', 'false');
-
+		this.playCurrentEnvSound();
 		this.isTrialRunning = true;
 		this.currentTrial++;
 		this.currentPoiColor = this.nextPoiColor();
@@ -185,6 +202,7 @@ AFRAME.registerComponent("trial-manager", {
 		if (envName === "B") document.querySelector("#envB").setAttribute("visible", true);
 		if (envName === "C") document.querySelector("#envC").setAttribute("visible", true);
 		if (envName === "D") document.querySelector("#envD").setAttribute("visible", true);
+		this.stopAllEnvSounds();
 	},
 
 	shuffle: function (arr) {
